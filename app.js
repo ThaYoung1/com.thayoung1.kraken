@@ -13,68 +13,43 @@ class MyApp extends Homey.App {
     const secret       = Homey.env.API_SECRET;
     const kraken       = new KrakenClient(key, secret);
 
-    const placeOrderCard = this.homey.flow.getActionCard("place-order");
+    const assetPairs = await kraken.api('AssetPairs');
 
-    const assets = await kraken.api('Assets');
+    const placeMarketOrderCard = this.homey.flow.getActionCard("place-market-order");
+    placeMarketOrderCard.registerRunListener(async (args, state) => {
+      this.log('order! ' + JSON.stringify(args));
+      // the need to calculate order volume
+      var ticker = await kraken.api('Ticker', { pair: args.pair.pair });
+      // 10 / +Object.values(ticker.result)[0].c[0] hier ben ik gebleven
 
-    placeOrderCard.registerArgumentAutocompleteListener(
-      "pair",
-      async (query, args) => {
-        /*const results = [          
-          {
-            name: "Test naam Bitcoin",
-            description: "Test omschrijving"
-          },
-          {
-            name: "Test naam Ethereum",
-            description: "Test omschrijving"
-          },
-          {
-            name: "Test naam XRP",
-            description: "Test omschrijving Dogecoin"
-          }          
-        ];*/
 
+      this.log(await kraken.api('AddOrder', { 
+        ordertype: 'markeddt', // (req) market, limit, stop-loss, take-profit, stop-loss-limit, take-profit-limit, settle-position
+        type: 'buy', // (req) buy, sell
+        volume: '1', // moet worden berekend met actuele prijs bij markt orders
+        pair: args.pair.pair, // gettable?
+        price: args.amount
+        //userref: 159753,
+        //expiretm: '1676565876' // expires in
+      }));
+
+    });
+    placeMarketOrderCard.registerArgumentAutocompleteListener("pair", async (query, args) => {
         // filter based on the query
-        /*
-        return results.filter((result) => {
-          return result.name.toLowerCase().includes(query.toLowerCase());
-       });*/
-
-        // filter based on the query
-        let results = Object.values(assets.result);
-        let henk = [];
-        results.forEach(x => {
-          var itm = {
-            name: x.altname
-          }; 
-          henk.push(itm);
+        let results = Object.values(assetPairs.result);
+        let resultsMapped = results.map((e) => {
+          return {
+            name: e.wsname,
+            pair: e.base + e.quote,
+            ordermin: e.ordermin
+          }
         });
 
-        /*return results.filter((result) => {
-          return result.altname.toLowerCase().includes(query.toLowerCase());
-      });*/
-        return henk.filter((y) => {
-          return y.name.toLowerCase().includes(query.toLowerCase());
-      });
-    }
+        return resultsMapped.filter((x) => {
+          return x.name.toLowerCase().includes(query.toLowerCase());
+        });
+      }
     );
-
-   
-    /*this.log(await kraken.api('Assets'));
-    this.log(await kraken.api('Balance'));
-    this.log(await kraken.api('Ticker', { pair : 'XXBTZUSD' }));
-    this.log(await kraken.api('ClosedOrders'));*/
-    
-    /*this.log(await kraken.api('AddOrder', { 
-      ordertype: 'limit', // (req) market, limit, stop-loss, take-profit, stop-loss-limit, take-profit-limit, settle-position
-      type: 'buy', // (req) buy, sell
-      volume: '1', // 
-      pair: 'XXBTZEUR', // gettable?
-      price: '100',
-      userref: 159753,
-      expiretm: '1676565876' // expires in
-    }));*/
   }
 }
 
