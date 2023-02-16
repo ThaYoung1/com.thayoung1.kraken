@@ -1,0 +1,17 @@
+{
+  "title": {
+    "en": "Place Order"
+  },
+  "hint": {
+    "en": "Place order on Kraken"
+  },
+  "args": [
+    {
+      "type": "autocomplete",
+      "name": "pair",
+      "placeholder": {
+        "en": "XXBTZEUR"
+      }
+    }
+  ]
+}
