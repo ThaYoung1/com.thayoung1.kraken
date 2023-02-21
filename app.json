@@ -34,7 +34,7 @@
           "en": "Place market order"
         },
         "titleFormatted": {
-          "en": "Place [[type]] market order for pair [[pair]] with volume [[volume]]"
+          "en": "Place [[type]] market order for pair [[pair]] with quantity [[volume]] [[buyin]]"
         },
         "hint": {
           "en": "Place market order on Kraken"
@@ -50,13 +50,13 @@
               {
                 "id": "buy",
                 "label": {
-                  "en": "Buy"
+                  "en": "BUY"
                 }
               },
               {
                 "id": "sell",
                 "label": {
-                  "en": "Sell"
+                  "en": "SELL"
                 }
               }
             ]
@@ -81,6 +81,14 @@
             "min": 0.01,
             "max": 10,
             "step": 0.01
+          },
+          {
+            "type": "autocomplete",
+            "name": "buyin",
+            "title": "Buy in",
+            "placeholder": {
+              "en": "EUR"
+            }
           }
         ],
         "id": "place-market-order"

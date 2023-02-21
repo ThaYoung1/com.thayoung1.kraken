@@ -14,21 +14,24 @@ class MyApp extends Homey.App {
     const kraken       = new KrakenClient(key, secret);
 
     const assetPairs = await kraken.api('AssetPairs');
+    const closedOrders = await kraken.api('ClosedOrders');
+
 
     const placeMarketOrderCard = this.homey.flow.getActionCard("place-market-order");
     placeMarketOrderCard.registerRunListener(async (args, state) => {
       this.log('order! ' + JSON.stringify(args));
+      
       // the need to calculate order volume
-      var ticker = await kraken.api('Ticker', { pair: args.pair.pair });
+      var ticker = await kraken.api('Ticker', { pair: args.pair.base + args.pair.quote });
       // 10 / +Object.values(ticker.result)[0].c[0] hier ben ik gebleven
 
-
       this.log(await kraken.api('AddOrder', { 
-        ordertype: 'markeddt', // (req) market, limit, stop-loss, take-profit, stop-loss-limit, take-profit-limit, settle-position
-        type: 'buy', // (req) buy, sell
-        volume: '1', // moet worden berekend met actuele prijs bij markt orders
-        pair: args.pair.pair, // gettable?
-        price: args.amount
+        ordertype: 'market', // (req) market, limit, stop-loss, take-profit, stop-loss-limit, take-profit-limit, settle-position
+        type: args.type, // (req) buy, sell
+        volume: args.volume, // moet worden berekend met actuele prijs bij markt orders
+        pair: args.pair.base + args.pair.quote, // gettable?
+        price: args.amount,
+        validate: Homey.env.TESTMODE
         //userref: 159753,
         //expiretm: '1676565876' // expires in
       }));
@@ -40,7 +43,8 @@ class MyApp extends Homey.App {
         let resultsMapped = results.map((e) => {
           return {
             name: e.wsname,
-            pair: e.base + e.quote,
+            base: e.base,
+            quote: e.quote,
             ordermin: e.ordermin
           }
         });
@@ -50,7 +54,36 @@ class MyApp extends Homey.App {
         });
       }
     );
+    
+    placeMarketOrderCard.registerArgumentAutocompleteListener("buyin", async (query, args) => {
+      // filter based on the query
+      let results = [];
+      results.push({ 
+        name: this.prettyPrintBaseQuote(args.pair.base),
+        base: args.pair.base        
+       });
+      results.push({ 
+        name: this.prettyPrintBaseQuote(args.pair.quote),
+        quote: args.pair.quote
+      });
+
+      return results.filter((x) => {
+        return x.name.toLowerCase().includes(query.toLowerCase());
+      });
+    }
+    );
   }
+
+  prettyPrintBaseQuote(item) {
+    if ( item.length >= 4 &&
+        (item.toUpperCase().startsWith('X') ||
+         item.toUpperCase().startsWith('Z')) ){
+        return item.substring(1);
+    } else {
+      return item;
+    }
+  }
+
 }
 
 module.exports = MyApp;
