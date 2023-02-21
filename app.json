@@ -31,32 +31,32 @@
     "actions": [
       {
         "title": {
-          "en": "Place market order"
+          "en": "Place limit order"
         },
         "titleFormatted": {
-          "en": "Place [[type]] market order for pair [[pair]] with quantity [[volume]] [[buyin]]"
+          "en": "Place [[type]] limit order for asset pair [[pair]] with quantity [[volume]] in [[unit]] for limit price [[price]]"
         },
         "hint": {
-          "en": "Place market order on Kraken"
+          "en": "Place limit order on Kraken"
         },
         "args": [
           {
             "type": "dropdown",
             "name": "type",
             "title": {
-              "en": "Buy or sell"
+              "en": "Buy or Sell"
             },
             "values": [
               {
                 "id": "buy",
                 "label": {
-                  "en": "BUY"
+                  "en": "Buy"
                 }
               },
               {
                 "id": "sell",
                 "label": {
-                  "en": "SELL"
+                  "en": "Sell"
                 }
               }
             ]
@@ -64,7 +64,7 @@
           {
             "type": "autocomplete",
             "name": "pair",
-            "title": "Pair",
+            "title": "Asset Pair",
             "placeholder": {
               "en": "XBT/EUR"
             }
@@ -84,8 +84,85 @@
           },
           {
             "type": "autocomplete",
-            "name": "buyin",
-            "title": "Buy in",
+            "name": "unit",
+            "title": "Unit to trade in",
+            "placeholder": {
+              "en": "EUR"
+            }
+          },
+          {
+            "type": "number",
+            "name": "price",
+            "title": {
+              "en": "Price"
+            },
+            "placeholder": {
+              "en": "Price of limit order"
+            },
+            "min": 0.01,
+            "max": 1000,
+            "step": 0.01
+          }
+        ],
+        "id": "place-limit-order"
+      },
+      {
+        "title": {
+          "en": "Place market order"
+        },
+        "titleFormatted": {
+          "en": "Place [[type]] market order for asset pair [[pair]] with quantity [[volume]] in [[unit]]"
+        },
+        "hint": {
+          "en": "Place market order on Kraken"
+        },
+        "args": [
+          {
+            "type": "dropdown",
+            "name": "type",
+            "title": {
+              "en": "Buy or Sell"
+            },
+            "values": [
+              {
+                "id": "buy",
+                "label": {
+                  "en": "Buy"
+                }
+              },
+              {
+                "id": "sell",
+                "label": {
+                  "en": "Sell"
+                }
+              }
+            ]
+          },
+          {
+            "type": "autocomplete",
+            "name": "pair",
+            "title": "Asset Pair",
+            "placeholder": {
+              "en": "XBT/EUR"
+            }
+          },
+          {
+            "type": "number",
+            "name": "volume",
+            "title": {
+              "en": "Volume"
+            },
+            "placeholder": {
+              "en": "In chosen pair"
+            },
+            "min": 0.01,
+            "max": 10,
+            "step": 0.01
+          },
+          {
+            "type": "autocomplete",
+            "name": "unit",
+            "title": "Unit to trade in",
             "placeholder": {
               "en": "EUR"
             }

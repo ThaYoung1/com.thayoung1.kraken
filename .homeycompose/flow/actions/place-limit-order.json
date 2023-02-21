@@ -1,12 +1,12 @@
 {
   "title": {
-    "en": "Place market order"
+    "en": "Place limit order"
   },
   "titleFormatted": { 
-    "en": "Place [[type]] market order for asset pair [[pair]] with quantity [[volume]] in [[unit]]" 
+    "en": "Place [[type]] limit order for asset pair [[pair]] with quantity [[volume]] in [[unit]] for limit price [[price]]" 
   },
   "hint": {
-    "en": "Place market order on Kraken"
+    "en": "Place limit order on Kraken"
   },
   "args": [
     {
@@ -42,6 +42,15 @@
       "placeholder": {
         "en": "EUR"
       }
+    },
+    {
+      "type": "number",
+      "name": "price",
+      "title": { "en": "Price" },
+      "placeholder": { "en": "Price of limit order" },
+      "min": 0.01,
+      "max": 1000,
+      "step": 0.01
     }
   ]
 }
