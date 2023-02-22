@@ -3,7 +3,7 @@
     "en": "Place limit order"
   },
   "titleFormatted": { 
-    "en": "Place [[type]] limit order for asset pair [[pair]] with quantity [[volume]] in [[unit]] for limit price [[price]]" 
+    "en": "Place [[type]] limit order for asset pair [[pair]] with quantity [[volume]] in [[unit]] for limit asset price [[price]]" 
   },
   "hint": {
     "en": "Place limit order on Kraken"
