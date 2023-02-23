@@ -34,7 +34,7 @@
           "en": "Pair price changes"
         },
         "titleFormatted": {
-          "en": "Pair [[pair]] price changes"
+          "en": "Pair [[pair]] becomes [[operator]] [[price]]"
         },
         "args": [
           {
@@ -44,9 +44,43 @@
             "placeholder": {
               "en": "choose asset pair"
             }
+          },
+          {
+            "type": "dropdown",
+            "name": "operator",
+            "title": {
+              "en": "operator"
+            },
+            "values": [
+              {
+                "id": "1",
+                "label": {
+                  "en": "Greater than"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "Smaller than"
+                }
+              }
+            ]
+          },
+          {
+            "type": "number",
+            "name": "price",
+            "title": {
+              "en": "price"
+            },
+            "placeholder": {
+              "en": "price"
+            },
+            "min": 0,
+            "max": 99999999,
+            "step": 0.01
           }
         ],
-        "id": "crypto-price-changes"
+        "id": "pair-price-changes"
       }
     ],
     "actions": [
