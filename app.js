@@ -24,7 +24,7 @@ class KrakenApp extends Homey.App {
 
     assetPairs = await kraken.api('AssetPairs');
     this.updateTicker = this.updateTicker.bind(this);
-    setInterval(this.updateTicker, 10000);
+    //setInterval(this.updateTicker, 10000);
 
     //this.getOHLC = this.getOHLC.bind(this);
     //setInterval(this.getOHLC, Homey.env.OHLC_REFRESH_RATE * 1000);
