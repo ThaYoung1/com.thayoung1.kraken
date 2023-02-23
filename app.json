@@ -28,150 +28,30 @@
   },
   "brandColor": "#5741d9",
   "flow": {
+    "triggers": [
+      {
+        "title": {
+          "en": "Pair price changes"
+        },
+        "titleFormatted": {
+          "en": "Pair [[pair]] price changes"
+        },
+        "args": [
+          {
+            "type": "autocomplete",
+            "name": "pair",
+            "title": "Asset Pair",
+            "placeholder": {
+              "en": "choose asset pair"
+            }
+          }
+        ],
+        "id": "crypto-price-changes"
+      }
+    ],
     "actions": [
       {
-        "title": {
-          "en": "Place limit order"
-        },
-        "titleFormatted": {
-          "en": "Place [[type]] limit order for asset pair [[pair]] with volume [[volume]] [[unit]] for limit price [[price]]"
-        },
-        "hint": {
-          "en": "Place limit order on Kraken"
-        },
-        "args": [
-          {
-            "type": "dropdown",
-            "name": "type",
-            "title": {
-              "en": "Buy or Sell"
-            },
-            "values": [
-              {
-                "id": "buy",
-                "label": {
-                  "en": "Buy"
-                }
-              },
-              {
-                "id": "sell",
-                "label": {
-                  "en": "Sell"
-                }
-              }
-            ]
-          },
-          {
-            "type": "autocomplete",
-            "name": "pair",
-            "title": "Asset Pair",
-            "placeholder": {
-              "en": "choose asset pair"
-            }
-          },
-          {
-            "type": "number",
-            "name": "volume",
-            "title": {
-              "en": "Volume"
-            },
-            "placeholder": {
-              "en": "fill in volume"
-            },
-            "min": 0,
-            "max": 10000,
-            "step": 0.0001
-          },
-          {
-            "type": "autocomplete",
-            "name": "unit",
-            "title": "Unit to trade in",
-            "placeholder": {
-              "en": "fill in unit to trade"
-            }
-          },
-          {
-            "type": "number",
-            "name": "price",
-            "title": {
-              "en": "Price"
-            },
-            "placeholder": {
-              "en": "fill in asset price"
-            },
-            "min": 0,
-            "max": 10000,
-            "step": 0.0001
-          }
-        ],
-        "id": "place-limit-order"
-      },
-      {
-        "title": {
-          "en": "Place market order"
-        },
-        "titleFormatted": {
-          "en": "Place [[type]] market order for asset pair [[pair]] with volume [[volume]] [[unit]]"
-        },
-        "hint": {
-          "en": "Place market order on Kraken"
-        },
-        "args": [
-          {
-            "type": "dropdown",
-            "name": "type",
-            "title": {
-              "en": "Buy or Sell"
-            },
-            "values": [
-              {
-                "id": "buy",
-                "label": {
-                  "en": "Buy"
-                }
-              },
-              {
-                "id": "sell",
-                "label": {
-                  "en": "Sell"
-                }
-              }
-            ]
-          },
-          {
-            "type": "autocomplete",
-            "name": "pair",
-            "title": "Asset Pair",
-            "placeholder": {
-              "en": "choose asset pair"
-            }
-          },
-          {
-            "type": "number",
-            "name": "volume",
-            "title": {
-              "en": "Volume"
-            },
-            "placeholder": {
-              "en": "fill in volume"
-            },
-            "min": 0,
-            "max": 10000,
-            "step": 0.0001
-          },
-          {
-            "type": "autocomplete",
-            "name": "unit",
-            "title": "Unit to trade in",
-            "placeholder": {
-              "en": "fill in unit to trade"
-            }
-          }
-        ],
-        "id": "place-market-order"
-      },
-      {
-        "id": "device-place-market-order",
+        "id": "place-market-order",
         "title": {
           "en": "Place market order"
         },
@@ -238,6 +118,88 @@
             }
           }
         ]
+      },
+      {
+        "id": "place-limit-order",
+        "title": {
+          "en": "Place limit order"
+        },
+        "titleFormatted": {
+          "en": "Place [[type]] limit order for asset pair [[pair]] with volume [[volume]] [[unit]] for limit price [[price]]"
+        },
+        "hint": {
+          "en": "Place limit order on Kraken"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=kraken-api"
+          },
+          {
+            "type": "dropdown",
+            "name": "type",
+            "title": {
+              "en": "Buy or Sell"
+            },
+            "values": [
+              {
+                "id": "buy",
+                "label": {
+                  "en": "Buy"
+                }
+              },
+              {
+                "id": "sell",
+                "label": {
+                  "en": "Sell"
+                }
+              }
+            ]
+          },
+          {
+            "type": "autocomplete",
+            "name": "pair",
+            "title": "Asset Pair",
+            "placeholder": {
+              "en": "choose asset pair"
+            }
+          },
+          {
+            "type": "number",
+            "name": "volume",
+            "title": {
+              "en": "Volume"
+            },
+            "placeholder": {
+              "en": "fill in volume"
+            },
+            "min": 0,
+            "max": 10000,
+            "step": 0.0001
+          },
+          {
+            "type": "autocomplete",
+            "name": "unit",
+            "title": "Unit to trade in",
+            "placeholder": {
+              "en": "fill in unit to trade"
+            }
+          },
+          {
+            "type": "number",
+            "name": "price",
+            "title": {
+              "en": "Price"
+            },
+            "placeholder": {
+              "en": "fill in asset price"
+            },
+            "min": 0,
+            "max": 10000,
+            "step": 0.0001
+          }
+        ]
       }
     ]
   },
@@ -292,31 +254,7 @@
           "template": "add_devices"
         }
       ],
-      "id": "kraken-api",
-      "settings": [
-        {
-          "id": "API Key",
-          "type": "password",
-          "label": {
-            "en": "API Key"
-          },
-          "value": "John Doe",
-          "hint": {
-            "en": "The Kraken API Key"
-          }
-        },
-        {
-          "id": "Private Key",
-          "type": "password",
-          "label": {
-            "en": "Private Key"
-          },
-          "value": "Secret",
-          "hint": {
-            "en": "The Kraken Private Key"
-          }
-        }
-      ]
+      "id": "kraken-api"
     }
   ]
 }

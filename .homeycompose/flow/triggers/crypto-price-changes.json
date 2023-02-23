@@ -1,0 +1,18 @@
+{
+  "title": {
+    "en": "Pair price changes"
+  },
+  "titleFormatted": { 
+    "en": "Pair [[pair]] price changes" 
+  },
+  "args": [
+    {
+      "type": "autocomplete",
+      "name": "pair",
+      "title": "Asset Pair",
+      "placeholder": {
+        "en": "choose asset pair"
+      }
+    }
+  ]
+}

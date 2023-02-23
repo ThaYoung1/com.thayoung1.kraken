@@ -3,21 +3,75 @@
 const { Driver } = require('homey');
 const KrakenClient = require('kraken-api');
 
+let assetPairs;
+let kraken;
+
 class KrakenAPIDriver extends Driver {
   async onInit() {
-    this.log('KrakenAPIDriver has been initialized');
-
-    this.flowcard = this.homey.flow.getDeviceTriggerCard("device-place-market-order");
-    placeDeviceMarketOrderCard.registerArgumentAutocompleteListener("pair", async (query, args) => { return this.autocompletePairs(query, args); });
-    placeDeviceMarketOrderCard.registerArgumentAutocompleteListener("unit", async (query, args) => { return this.autocompleteUnits(query, args); });
-    placeDeviceMarketOrderCard.registerRunListener(async (args, state) => {
+    const placeMarketOrderCard = this.homey.flow.getActionCard("place-market-order");
+    placeMarketOrderCard.registerArgumentAutocompleteListener("pair", async (query, args) => { return await this.autocompletePairs(query, args); });
+    placeMarketOrderCard.registerArgumentAutocompleteListener("unit", async (query, args) => { return await this.autocompleteUnits(query, args); });
+    placeMarketOrderCard.registerRunListener(async (args, state) => {
       // the need to calculate order volume
       var volume = await this.getVolume(args);
       var result = await this.addOrder('market', volume, args);
       throw new Error(JSON.stringify(result));
     });
+
+    const placeLimitOrderCard = this.homey.flow.getActionCard("place-limit-order");
+    placeLimitOrderCard.registerArgumentAutocompleteListener("pair", async (query, args) => { return await this.autocompletePairs(query, args); });
+    placeLimitOrderCard.registerArgumentAutocompleteListener("unit", async (query, args) => { return await this.autocompleteUnits(query, args); });
+    placeLimitOrderCard.registerRunListener(async (args, state) => {
+      // the need to calculate order volume
+      var volume = await this.getVolume(args, args.price);
+      var result = await this.addOrder('limit', volume, args);
+      throw new Error(JSON.stringify(result));
+    });
   }
 
+  async onPair(session) {
+    let apiKey;
+    let privateKey;
+    let balance;
+
+    session.setHandler("login", async (data) => {
+      apiKey = data.username;
+      privateKey = data.password;
+
+      kraken = new KrakenClient(apiKey, privateKey);
+
+      try {
+        balance = await kraken.api('Balance');
+        
+      } catch (error) {
+        return false;
+      }
+
+      return true;
+      // return true to continue adding the device if the login succeeded
+      // return false to indicate to the user the login attempt failed
+      // thrown errors will also be shown to the user
+    });
+
+    session.setHandler("list_devices", async () => {
+      balance = await kraken.api('Balance');
+      assetPairs = Object.values(assetPairs.result);
+
+      return {
+        name: 'Kraken API',
+        data: {
+          id: Date.now(),
+        },
+        settings: {
+          // Store username & password in settings
+          // so the user can change them later
+          apiKey,
+          privateKey,
+        },
+      };
+
+    });
+  }
   
   async addOrder(ordertype, volume, args){
     var result = await kraken.api('AddOrder', { 
@@ -25,7 +79,7 @@ class KrakenAPIDriver extends Driver {
       type: args.type, // (req) buy, sell
       volume: volume, // moet worden berekend met actuele prijs bij markt orders
       pair: args.pair.base + args.pair.quote, // gettable?
-      validate: Homey.env.TESTMODE,
+      validate: 'true',
       price: args.price
       //userref: 159753,
       //expiretm: '1676565876' // expires in
@@ -39,6 +93,7 @@ class KrakenAPIDriver extends Driver {
 
     if (args.unit.baseorquote == args.pair.quote){
       if (!price){
+        kraken = new KrakenClient(args.device.getSettings().apiKey, args.device.getSettings().privateKey);
         var ticker = await kraken.api('Ticker', { pair: args.pair.base + args.pair.quote });
         var arrTicker = Object.values(ticker.result);
         price = arrTicker[0].c[0];
@@ -52,7 +107,7 @@ class KrakenAPIDriver extends Driver {
     return volume;
   }
 
-  autocompleteUnits(query, args){
+  async autocompleteUnits(query, args){
       // filter based on the query
       let results = [];
       results.push({ 
@@ -70,8 +125,13 @@ class KrakenAPIDriver extends Driver {
 
   }
 
-  autocompletePairs(query, args){
+  async autocompletePairs(query, args){
      // filter based on the query
+     kraken = new KrakenClient(args.device.getSettings().apiKey, args.device.getSettings().privateKey);
+     if (!assetPairs){
+      assetPairs = await kraken.api('AssetPairs');
+     }
+
      let results = Object.values(assetPairs.result);
      let resultsMapped = results.map((e) => {
        return {
@@ -87,64 +147,15 @@ class KrakenAPIDriver extends Driver {
      });
   }
 
-  async onPair(session) {
-    let apiKey;
-    let privateKey;
-    let balance;
-    let kraken;
-
-    session.setHandler("login", async (data) => {
-      apiKey = data.username;
-      privateKey = data.password;
-
-      kraken = new KrakenClient(apiKey, privateKey);
-
-      try {
-        balance = await kraken.api('Balance');
-      } catch (error) {
-        return false;
-      }
-
-      return true;
-      // return true to continue adding the device if the login succeeded
-      // return false to indicate to the user the login attempt failed
-      // thrown errors will also be shown to the user
-    });
-
-    session.setHandler("list_devices", async () => {
-      balance = await kraken.api('Balance');
-
-      return {
-        name: 'Kraken API',
-        data: {
-          id: Date.now(),
-        },
-        settings: {
-          // Store username & password in settings
-          // so the user can change them later
-          apiKey,
-          privateKey,
-        },
-      };
-
-    });
+  prettyPrintBaseQuote(item) {
+    if ( item.length >= 4 &&
+        (item.toUpperCase().startsWith('X') ||
+         item.toUpperCase().startsWith('Z')) ){
+        return item.substring(1);
+    } else {
+      return item;
+    }
   }
-
-  async onPairListDevices() {
-    return [
-      // Example device data, note that `store` is optional
-      // {
-      //   name: 'My Device',
-      //   data: {
-      //     id: 'my-device',
-      //   },
-      //   store: {
-      //     address: '127.0.0.1',
-      //   },
-      // },
-    ];
-  }
-
 }
 
 module.exports = KrakenAPIDriver;
