@@ -34,7 +34,7 @@
           "en": "Place limit order"
         },
         "titleFormatted": {
-          "en": "Place [[type]] limit order for asset pair [[pair]] with quantity [[volume]] in [[unit]] for limit asset price [[price]]"
+          "en": "Place [[type]] limit order for asset pair [[pair]] with volume [[volume]] [[unit]] for limit price [[price]]"
         },
         "hint": {
           "en": "Place limit order on Kraken"
@@ -66,7 +66,7 @@
             "name": "pair",
             "title": "Asset Pair",
             "placeholder": {
-              "en": "XBT/EUR"
+              "en": "choose asset pair"
             }
           },
           {
@@ -76,18 +76,18 @@
               "en": "Volume"
             },
             "placeholder": {
-              "en": "In chosen pair"
+              "en": "fill in volume"
             },
-            "min": 0.01,
-            "max": 10,
-            "step": 0.01
+            "min": 0,
+            "max": 10000,
+            "step": 0.0001
           },
           {
             "type": "autocomplete",
             "name": "unit",
             "title": "Unit to trade in",
             "placeholder": {
-              "en": "EUR"
+              "en": "fill in unit to trade"
             }
           },
           {
@@ -97,11 +97,11 @@
               "en": "Price"
             },
             "placeholder": {
-              "en": "Price of limit order"
+              "en": "fill in asset price"
             },
-            "min": 0.01,
-            "max": 1000,
-            "step": 0.01
+            "min": 0,
+            "max": 10000,
+            "step": 0.0001
           }
         ],
         "id": "place-limit-order"
@@ -111,7 +111,7 @@
           "en": "Place market order"
         },
         "titleFormatted": {
-          "en": "Place [[type]] market order for asset pair [[pair]] with quantity [[volume]] in [[unit]]"
+          "en": "Place [[type]] market order for asset pair [[pair]] with volume [[volume]] [[unit]]"
         },
         "hint": {
           "en": "Place market order on Kraken"
@@ -143,7 +143,7 @@
             "name": "pair",
             "title": "Asset Pair",
             "placeholder": {
-              "en": "XBT/EUR"
+              "en": "choose asset pair"
             }
           },
           {
@@ -153,23 +153,170 @@
               "en": "Volume"
             },
             "placeholder": {
-              "en": "In chosen pair"
+              "en": "fill in volume"
             },
-            "min": 0.01,
-            "max": 10,
-            "step": 0.01
+            "min": 0,
+            "max": 10000,
+            "step": 0.0001
           },
           {
             "type": "autocomplete",
             "name": "unit",
             "title": "Unit to trade in",
             "placeholder": {
-              "en": "EUR"
+              "en": "fill in unit to trade"
             }
           }
         ],
         "id": "place-market-order"
+      },
+      {
+        "id": "device-place-market-order",
+        "title": {
+          "en": "Place market order"
+        },
+        "titleFormatted": {
+          "en": "Place [[type]] market order for asset pair [[pair]] with volume [[volume]] [[unit]]"
+        },
+        "hint": {
+          "en": "Place market order on Kraken"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=kraken-api"
+          },
+          {
+            "type": "dropdown",
+            "name": "type",
+            "title": {
+              "en": "Buy or Sell"
+            },
+            "values": [
+              {
+                "id": "buy",
+                "label": {
+                  "en": "Buy"
+                }
+              },
+              {
+                "id": "sell",
+                "label": {
+                  "en": "Sell"
+                }
+              }
+            ]
+          },
+          {
+            "type": "autocomplete",
+            "name": "pair",
+            "title": "Asset Pair",
+            "placeholder": {
+              "en": "choose asset pair"
+            }
+          },
+          {
+            "type": "number",
+            "name": "volume",
+            "title": {
+              "en": "Volume"
+            },
+            "placeholder": {
+              "en": "fill in volume"
+            },
+            "min": 0,
+            "max": 10000,
+            "step": 0.0001
+          },
+          {
+            "type": "autocomplete",
+            "name": "unit",
+            "title": "Unit to trade in",
+            "placeholder": {
+              "en": "fill in unit to trade"
+            }
+          }
+        ]
       }
     ]
-  }
+  },
+  "drivers": [
+    {
+      "name": {
+        "en": "kraken-api"
+      },
+      "class": "other",
+      "capabilities": [],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [],
+      "images": {
+        "small": "/drivers/kraken-api/assets/images/small.png",
+        "large": "/drivers/kraken-api/assets/images/large.png",
+        "xlarge": "/drivers/kraken-api/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "login_credentials",
+          "template": "login_credentials",
+          "options": {
+            "logo": "logo.png",
+            "title": {
+              "en": "Fill in your Kraken API and Private Key"
+            },
+            "usernameLabel": {
+              "en": "API Key"
+            },
+            "usernamePlaceholder": {
+              "en": "YRY/qrwqrqwrq..."
+            },
+            "passwordLabel": {
+              "en": "Private Key"
+            },
+            "passwordPlaceholder": {
+              "en": "JDDSANNmnNx..."
+            }
+          }
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "kraken-api",
+      "settings": [
+        {
+          "id": "API Key",
+          "type": "password",
+          "label": {
+            "en": "API Key"
+          },
+          "value": "John Doe",
+          "hint": {
+            "en": "The Kraken API Key"
+          }
+        },
+        {
+          "id": "Private Key",
+          "type": "password",
+          "label": {
+            "en": "Private Key"
+          },
+          "value": "Secret",
+          "hint": {
+            "en": "The Kraken Private Key"
+          }
+        }
+      ]
+    }
+  ]
 }
