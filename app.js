@@ -11,6 +11,9 @@ let assetPairs, ticker;
 
 class KrakenApp extends Homey.App {
   async onInit() {
+    // init settings
+    this.homey.settings.set("refreshRate", 30);
+
     // get flow trigger cards and add listeners
     const pairPriceUpdatedCard = this.homey.flow.getTriggerCard("pair-price-updated");
     // autocomplete list with pairs based on inputs
@@ -30,7 +33,7 @@ class KrakenApp extends Homey.App {
     });
 
     this.updateTicker = this.updateTicker.bind(this);
-    setInterval(this.updateTicker, Homey.env.REFRESH_RATE * 1000);
+    setInterval(this.updateTicker, this.homey.settings.get("refreshRate") * 1000);
   }
 
   async updateTicker(){

@@ -12,7 +12,7 @@
     "nl": "Kraken"
   },
   "description": {
-    "en": "Adds support for Kraken",
+    "en": "Making crypto trading even smarter",
     "nl": "Biedt ondersteuning voor Kraken"
   },
   "category": [
@@ -29,6 +29,16 @@
     "email": "davydejong.ddj@gmail.com"
   },
   "brandColor": "#5741d9",
+  "tags": {
+    "en": [
+      "crypto",
+      "kraken",
+      "binance",
+      "bitcoin",
+      "ethereum",
+      "xrp"
+    ]
+  },
   "flow": {
     "triggers": [
       {
@@ -127,7 +137,7 @@
             "name": "pair",
             "title": {
               "en": "Asset Pair",
-              "nl": "ASset Paar"
+              "nl": "Asset Paar"
             },
             "placeholder": {
               "en": "choose asset pair",
@@ -212,7 +222,7 @@
             "name": "pair",
             "title": {
               "en": "Asset Pair",
-              "nl": "ASset Paar"
+              "nl": "Asset Paar"
             },
             "placeholder": {
               "en": "choose asset pair",
@@ -318,7 +328,18 @@
           "template": "add_devices"
         }
       ],
-      "id": "kraken-api"
+      "id": "kraken-api",
+      "settings": [
+        {
+          "id": "apitestmode",
+          "type": "checkbox",
+          "value": true,
+          "label": {
+            "en": "API testmode",
+            "nl": "API testmodus"
+          }
+        }
+      ]
     }
   ]
 }

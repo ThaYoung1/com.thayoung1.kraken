@@ -1,0 +1,11 @@
+[
+    {
+        "id": "apitestmode",
+        "type": "checkbox",
+        "value": true,
+        "label": { 
+            "en": "API testmode",
+            "nl": "API testmodus"
+        }
+    }
+]

@@ -11,7 +11,7 @@
     "nl": "Kraken"
   },
   "description": {
-    "en": "Adds support for Kraken",
+    "en": "Making crypto trading even smarter",
     "nl": "Biedt ondersteuning voor Kraken"
   },
   "category": [
@@ -27,5 +27,15 @@
     "name": "ThaYoung1",
     "email": "davydejong.ddj@gmail.com"
   },
-  "brandColor": "#5741d9"
+  "brandColor": "#5741d9",
+  "tags": {
+    "en": [
+      "crypto",
+      "kraken",
+      "binance",
+      "bitcoin",
+      "ethereum",
+      "xrp"
+    ]
+  }
 }
