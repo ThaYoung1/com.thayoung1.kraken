@@ -8,10 +8,12 @@
     "local"
   ],
   "name": {
-    "en": "Kraken"
+    "en": "Kraken",
+    "nl": "Kraken"
   },
   "description": {
-    "en": "Adds support for Kraken"
+    "en": "Adds support for Kraken",
+    "nl": "Biedt ondersteuning voor Kraken"
   },
   "category": [
     "internet"
@@ -31,18 +33,24 @@
     "triggers": [
       {
         "title": {
-          "en": "Pair price updated"
+          "en": "Pair price updated",
+          "nl": "Paar prijs bijgewerkt"
         },
         "titleFormatted": {
-          "en": "Pair [[pair]] price updated"
+          "en": "Pair [[pair]] price updated",
+          "nl": "Paar [[pair]] prijs bijgewerkt"
         },
         "args": [
           {
             "type": "autocomplete",
             "name": "pair",
-            "title": "Asset Pair",
+            "title": {
+              "en": "Asset Pair",
+              "nl": "Asset Paar"
+            },
             "placeholder": {
-              "en": "choose asset pair"
+              "en": "choose asset pair",
+              "nl": "kies asset paar"
             }
           }
         ],
@@ -51,7 +59,8 @@
             "name": "price",
             "type": "number",
             "title": {
-              "en": "Asset Price"
+              "en": "Asset Price",
+              "nl": "Asset Prijs"
             },
             "example": 22495.81
           },
@@ -59,7 +68,8 @@
             "name": "pair",
             "type": "string",
             "title": {
-              "en": "Asset Pair"
+              "en": "Asset Pair",
+              "nl": "Asset Paar"
             },
             "example": "XBT/EUR"
           }
@@ -71,13 +81,16 @@
       {
         "id": "place-market-order",
         "title": {
-          "en": "Place market order"
+          "en": "Place market order",
+          "nl": "Plaats markt order"
         },
         "titleFormatted": {
-          "en": "Place [[type]] market order for asset pair [[pair]] with volume [[volume]] [[unit]]"
+          "en": "Place [[type]] market order for asset pair [[pair]] with volume [[volume]] [[unit]]",
+          "nl": "Plaats [[type]] markt order voor asset paar [[pair]] met volume [[volume]] [[unit]]"
         },
         "hint": {
-          "en": "Place market order on Kraken"
+          "en": "Place market order on Kraken",
+          "nl": "Plaats markt order op Kraken"
         },
         "args": [
           {
@@ -89,19 +102,22 @@
             "type": "dropdown",
             "name": "type",
             "title": {
-              "en": "Buy or Sell"
+              "en": "Buy or Sell",
+              "nl": "Koop of Verkoop"
             },
             "values": [
               {
                 "id": "buy",
                 "label": {
-                  "en": "Buy"
+                  "en": "Buy",
+                  "nl": "Koop"
                 }
               },
               {
                 "id": "sell",
                 "label": {
-                  "en": "Sell"
+                  "en": "Sell",
+                  "nl": "Verkoop"
                 }
               }
             ]
@@ -109,19 +125,25 @@
           {
             "type": "autocomplete",
             "name": "pair",
-            "title": "Asset Pair",
+            "title": {
+              "en": "Asset Pair",
+              "nl": "ASset Paar"
+            },
             "placeholder": {
-              "en": "choose asset pair"
+              "en": "choose asset pair",
+              "nl": "kies asset paar"
             }
           },
           {
             "type": "number",
             "name": "volume",
             "title": {
-              "en": "Volume"
+              "en": "Volume",
+              "nl": "Volume"
             },
             "placeholder": {
-              "en": "fill in volume"
+              "en": "fill in volume",
+              "nl": "vul volume in"
             },
             "min": 0,
             "max": 10000,
@@ -130,9 +152,13 @@
           {
             "type": "autocomplete",
             "name": "unit",
-            "title": "Unit to trade in",
+            "title": {
+              "en": "Unit to trade in",
+              "nl": "Eenheid om in te handelen"
+            },
             "placeholder": {
-              "en": "fill in unit to trade"
+              "en": "fill in unit to trade",
+              "nl": "vul de eenheid om in te handelen in"
             }
           }
         ]
@@ -140,13 +166,16 @@
       {
         "id": "place-limit-order",
         "title": {
-          "en": "Place limit order"
+          "en": "Place limit order",
+          "nl": "Plaats limiet order"
         },
         "titleFormatted": {
-          "en": "Place [[type]] limit order for asset pair [[pair]] with volume [[volume]] [[unit]] for limit price [[price]]"
+          "en": "Place [[type]] limit order for asset pair [[pair]] with volume [[volume]] [[unit]] for limit price [[price]]",
+          "nl": "Plaats [[type]] limiet order voor asset paar [[pair]] met volume [[volume]] [[unit]] voor limiet prijs [[price]]"
         },
         "hint": {
-          "en": "Place limit order on Kraken"
+          "en": "Place limit order on Kraken",
+          "nl": "Plaats limiet order op Kraken"
         },
         "args": [
           {
@@ -158,19 +187,22 @@
             "type": "dropdown",
             "name": "type",
             "title": {
-              "en": "Buy or Sell"
+              "en": "Buy or Sell",
+              "nl": "Koop of Verkoop"
             },
             "values": [
               {
                 "id": "buy",
                 "label": {
-                  "en": "Buy"
+                  "en": "Buy",
+                  "nl": "Koop"
                 }
               },
               {
                 "id": "sell",
                 "label": {
-                  "en": "Sell"
+                  "en": "Sell",
+                  "nl": "Verkoop"
                 }
               }
             ]
@@ -178,19 +210,25 @@
           {
             "type": "autocomplete",
             "name": "pair",
-            "title": "Asset Pair",
+            "title": {
+              "en": "Asset Pair",
+              "nl": "ASset Paar"
+            },
             "placeholder": {
-              "en": "choose asset pair"
+              "en": "choose asset pair",
+              "nl": "kies asset paar"
             }
           },
           {
             "type": "number",
             "name": "volume",
             "title": {
-              "en": "Volume"
+              "en": "Volume",
+              "nl": "Volume"
             },
             "placeholder": {
-              "en": "fill in volume"
+              "en": "fill in volume",
+              "nl": "vul volume in"
             },
             "min": 0,
             "max": 10000,
@@ -199,19 +237,25 @@
           {
             "type": "autocomplete",
             "name": "unit",
-            "title": "Unit to trade in",
+            "title": {
+              "en": "Unit to trade in",
+              "nl": "Eenheid om in te handelen"
+            },
             "placeholder": {
-              "en": "fill in unit to trade"
+              "en": "fill in unit to trade",
+              "nl": "vul de eenheid om in te handelen in"
             }
           },
           {
             "type": "number",
             "name": "price",
             "title": {
-              "en": "Price"
+              "en": "Price",
+              "nl": "Prijs"
             },
             "placeholder": {
-              "en": "fill in asset price"
+              "en": "fill in asset price",
+              "nl": "vul de asset prijs in"
             },
             "min": 0,
             "max": 10000,
@@ -224,7 +268,8 @@
   "drivers": [
     {
       "name": {
-        "en": "kraken-api"
+        "en": "Kraken API",
+        "nl": "Kraken API"
       },
       "class": "other",
       "capabilities": [],
@@ -244,19 +289,20 @@
           "options": {
             "logo": "logo.png",
             "title": {
-              "en": "Fill in your Kraken API and Private Key"
+              "en": "Fill in your Kraken API and Private Key",
+              "nl": "Voer je Kraken API en Private Key in"
             },
             "usernameLabel": {
               "en": "API Key"
             },
             "usernamePlaceholder": {
-              "en": "YRY/qrwqrqwrq..."
+              "en": "JDduUwiwIOIOOWw..."
             },
             "passwordLabel": {
               "en": "Private Key"
             },
             "passwordPlaceholder": {
-              "en": "JDDSANNmnNx..."
+              "en": "aaSkKQKKekddd..."
             }
           }
         },

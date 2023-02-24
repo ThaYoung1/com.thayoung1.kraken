@@ -1,6 +1,7 @@
 {
   "name": {
-    "en": "kraken-api"
+    "en": "Kraken API",
+    "nl": "Kraken API"
   },
   "class": "other",
   "capabilities": [],
@@ -20,12 +21,13 @@
       "options": {
         "logo": "logo.png",
         "title": {
-          "en": "Fill in your Kraken API and Private Key"
+          "en": "Fill in your Kraken API and Private Key",
+          "nl": "Voer je Kraken API en Private Key in"
         },
         "usernameLabel": { "en": "API Key" },
-        "usernamePlaceholder": { "en": "YRY/qrwqrqwrq..." },
+        "usernamePlaceholder": { "en": "JDduUwiwIOIOOWw..." },
         "passwordLabel": { "en": "Private Key" },
-        "passwordPlaceholder": { "en": "JDDSANNmnNx..." }
+        "passwordPlaceholder": { "en": "aaSkKQKKekddd..." }
       }
     },
     {

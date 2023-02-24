@@ -3,37 +3,63 @@
     {
       "id": "place-market-order",
       "title": {
-        "en": "Place market order"
+        "en": "Place market order",
+        "nl": "Plaats markt order"
       },
       "titleFormatted": { 
-        "en": "Place [[type]] market order for asset pair [[pair]] with volume [[volume]] [[unit]]" 
+        "en": "Place [[type]] market order for asset pair [[pair]] with volume [[volume]] [[unit]]",
+        "nl": "Plaats [[type]] markt order voor asset paar [[pair]] met volume [[volume]] [[unit]]" 
       },
       "hint": {
-        "en": "Place market order on Kraken"
+        "en": "Place market order on Kraken",
+        "nl": "Plaats markt order op Kraken"
       },
       "args": [
         {
           "type": "dropdown",
           "name": "type",
-          "title": { "en": "Buy or Sell" },
+          "title": { 
+            "en": "Buy or Sell",
+            "nl": "Koop of Verkoop" 
+          },
           "values": [
-            { "id": "buy", "label": { "en": "Buy" } },
-            { "id": "sell", "label": { "en": "Sell" } }
+            { "id": "buy", 
+              "label": { 
+                "en": "Buy",
+                "nl": "Koop"
+              } 
+            },
+            { "id": "sell", 
+              "label": { 
+                "en": "Sell",
+                "nl": "Verkoop" 
+              } 
+            }
           ]
         },
         {
           "type": "autocomplete",
           "name": "pair",
-          "title": "Asset Pair",
+          "title": {
+            "en": "Asset Pair",
+            "nl": "ASset Paar"
+          },
           "placeholder": {
-            "en": "choose asset pair"
+            "en": "choose asset pair",
+            "nl": "kies asset paar"
           }
         },
         {
           "type": "number",
           "name": "volume",
-          "title": { "en": "Volume" },
-          "placeholder": { "en": "fill in volume" },
+          "title": { 
+            "en": "Volume",
+            "nl": "Volume" 
+          },
+          "placeholder": { 
+            "en": "fill in volume",
+            "nl": "vul volume in"
+          },
           "min": 0,
           "max": 10000,
           "step": 0.0001
@@ -41,9 +67,13 @@
         {
           "type": "autocomplete",
           "name": "unit",
-          "title": "Unit to trade in",
+          "title": {
+            "en": "Unit to trade in",
+            "nl": "Eenheid om in te handelen"
+          },
           "placeholder": {
-            "en": "fill in unit to trade"
+            "en": "fill in unit to trade",
+            "nl": "vul de eenheid om in te handelen in"
           }
         }
       ]
@@ -51,37 +81,63 @@
     {
       "id": "place-limit-order",
       "title": {
-        "en": "Place limit order"
+        "en": "Place limit order",
+        "nl": "Plaats limiet order"
       },
       "titleFormatted": { 
-        "en": "Place [[type]] limit order for asset pair [[pair]] with volume [[volume]] [[unit]] for limit price [[price]]" 
+        "en": "Place [[type]] limit order for asset pair [[pair]] with volume [[volume]] [[unit]] for limit price [[price]]",
+        "nl": "Plaats [[type]] limiet order voor asset paar [[pair]] met volume [[volume]] [[unit]] voor limiet prijs [[price]]" 
       },
       "hint": {
-        "en": "Place limit order on Kraken"
+        "en": "Place limit order on Kraken",
+        "nl": "Plaats limiet order op Kraken"
       },
       "args": [
         {
           "type": "dropdown",
           "name": "type",
-          "title": { "en": "Buy or Sell" },
+          "title": { 
+            "en": "Buy or Sell",
+            "nl": "Koop of Verkoop" 
+          },
           "values": [
-            { "id": "buy", "label": { "en": "Buy" } },
-            { "id": "sell", "label": { "en": "Sell" } }
+            { "id": "buy", 
+              "label": { 
+                "en": "Buy",
+                "nl": "Koop"
+              } 
+            },
+            { "id": "sell", 
+              "label": { 
+                "en": "Sell",
+                "nl": "Verkoop" 
+              } 
+            }
           ]
         },
         {
           "type": "autocomplete",
           "name": "pair",
-          "title": "Asset Pair",
+          "title": {
+            "en": "Asset Pair",
+            "nl": "ASset Paar"
+          },
           "placeholder": {
-            "en": "choose asset pair"
+            "en": "choose asset pair",
+            "nl": "kies asset paar"
           }
         },
         {
           "type": "number",
           "name": "volume",
-          "title": { "en": "Volume" },
-          "placeholder": { "en": "fill in volume" },
+          "title": { 
+            "en": "Volume",
+            "nl": "Volume" 
+          },
+          "placeholder": { 
+            "en": "fill in volume",
+            "nl": "vul volume in"
+          },
           "min": 0,
           "max": 10000,
           "step": 0.0001
@@ -89,16 +145,26 @@
         {
           "type": "autocomplete",
           "name": "unit",
-          "title": "Unit to trade in",
+          "title": {
+            "en": "Unit to trade in",
+            "nl": "Eenheid om in te handelen"
+          },
           "placeholder": {
-            "en": "fill in unit to trade"
+            "en": "fill in unit to trade",
+            "nl": "vul de eenheid om in te handelen in"
           }
         },
         {
           "type": "number",
           "name": "price",
-          "title": { "en": "Price" },
-          "placeholder": { "en": "fill in asset price" },
+          "title": { 
+            "en": "Price",
+            "nl": "Prijs" 
+          },
+          "placeholder": { 
+            "en": "fill in asset price",
+            "nl": "vul de asset prijs in" 
+          },
           "min": 0,
           "max": 10000,
           "step": 0.0001

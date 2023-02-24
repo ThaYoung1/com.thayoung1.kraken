@@ -1,17 +1,23 @@
 {
   "title": {
-    "en": "Pair price updated"
+    "en": "Pair price updated",
+    "nl": "Paar prijs bijgewerkt"
   },
   "titleFormatted": { 
-    "en": "Pair [[pair]] price updated" 
+    "en": "Pair [[pair]] price updated",
+    "nl": "Paar [[pair]] prijs bijgewerkt"
   },  
   "args": [
     {
       "type": "autocomplete",
       "name": "pair",
-      "title": "Asset Pair",
+      "title": {
+        "en": "Asset Pair",
+        "nl": "Asset Paar"
+      },
       "placeholder": {
-        "en": "choose asset pair"
+        "en": "choose asset pair",
+        "nl": "kies asset paar"
       }
     }
   ],
@@ -19,13 +25,19 @@
     {
       "name": "price",
       "type": "number",
-      "title": { "en": "Asset Price" },
+      "title": { 
+        "en": "Asset Price",
+        "nl": "Asset Prijs"
+      },
       "example": 22495.81
     },
     {
       "name": "pair",
       "type": "string",
-      "title": { "en": "Asset Pair" },
+      "title": { 
+        "en": "Asset Pair",
+        "nl": "Asset Paar"
+      },
       "example": "XBT/EUR"
     }
   ]

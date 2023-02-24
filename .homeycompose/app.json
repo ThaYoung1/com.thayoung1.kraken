@@ -7,10 +7,12 @@
     "local"
   ],
   "name": {
-    "en": "Kraken"
+    "en": "Kraken",
+    "nl": "Kraken"
   },
   "description": {
-    "en": "Adds support for Kraken"
+    "en": "Adds support for Kraken",
+    "nl": "Biedt ondersteuning voor Kraken"
   },
   "category": [
     "internet"
