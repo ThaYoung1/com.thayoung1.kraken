@@ -2,50 +2,62 @@
 
 require('inspector').open(9231, '0.0.0.0')
 
+const KrakenLib = require('./lib/KrakenLib');
 const Homey = require('homey');
 const KrakenClient = require('kraken-api');
 
-let kraken;
-let assetPairs;
-let ticker;
+let kraken = new KrakenClient(null, null); 
+let assetPairs, ticker;
 
 class KrakenApp extends Homey.App {
   async onInit() {
-    this.log('KrakenApp has been initialized');
-
-    kraken = new KrakenClient(null, null);
-    const pairPriceChangesCard = this.homey.flow.getTriggerCard("pair-price-changes");
-    pairPriceChangesCard.registerArgumentAutocompleteListener("pair", async (query, args) => { return await this.autocompletePairs(query, args); });
-    pairPriceChangesCard.registerRunListener( async (query, args) => {
-      this.log('flow run. Price XXBTZEUR: ' + args.result.XXBTZEUR.c[0]);
-      //args.result.XXBTZEUR.c[0]
-      return true;
+    // get flow trigger cards and add listeners
+    const pairPriceUpdatedCard = this.homey.flow.getTriggerCard("pair-price-updated");
+    // autocomplete list with pairs based on inputs
+    pairPriceUpdatedCard.registerArgumentAutocompleteListener("pair", async (query, args) => { return await this.autocompletePairs(query, args); });
+    // when a flow gets updated, update the list with pairs that are used in flow cards
+    pairPriceUpdatedCard.on('update', (param) => {
+      this.homey.flow.getTriggerCard("pair-price-updated").getArgumentValues().then(args => {
+        this.homey.settings.set("pairsInCards", args);
+      });
+    });
+    // when flow is triggered
+    pairPriceUpdatedCard.registerRunListener( async (query, args) => {
+      if (query.pair.base + query.pair.quote == args[0]) {
+        return true;
+      }
+      return false;
     });
 
-    assetPairs = await kraken.api('AssetPairs');
     this.updateTicker = this.updateTicker.bind(this);
-    //setInterval(this.updateTicker, 10000);
-
-    //this.getOHLC = this.getOHLC.bind(this);
-    //setInterval(this.getOHLC, Homey.env.OHLC_REFRESH_RATE * 1000);
+    setInterval(this.updateTicker, Homey.env.REFRESH_RATE * 1000);
   }
 
   async updateTicker(){
-    this.log('ticker');
-    ticker = await kraken.api('Ticker');
-    const pairPriceChangesCard = this.homey.flow.getTriggerCard("pair-price-changes");
-    pairPriceChangesCard.trigger(null, ticker);
-  }
+    this.log('updateTicker start');
 
-  async getOHLC(){
-    var result = await kraken.api('OHLC', { pair: 'XBTEUR', interval: 1440 });    
-    this.log(JSON.stringify(result));
+    // get the pairs which are used in flow cards 
+    const pairsInCards = this.homey.settings.get("pairsInCards");
+    // get ticker info for all assets and convert to an array we can work with
+    ticker = await kraken.api('Ticker');
+    const tickerPair = Object.entries(Object.entries(ticker)[1][1]);
+    // trigger 
+    pairsInCards.forEach(x => {
+      let result = tickerPair.find(y => y[0] == x.pair.base + x.pair.quote);
+      if (result) {
+        const tokens = { 
+          price: +result[1].c[0],
+          pair: x.pair.name };
+        const pairPriceUpdatedCard = this.homey.flow.getTriggerCard("pair-price-updated");
+        pairPriceUpdatedCard.trigger(tokens, result);
+      }
+    });
+
+    this.log('updateTicker end');
   }
 
   async autocompletePairs(query, args){
     // filter based on the query
-    kraken = new KrakenClient(null,null);
-
     if (!assetPairs){
      assetPairs = await kraken.api('AssetPairs');
     }

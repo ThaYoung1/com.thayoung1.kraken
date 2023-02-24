@@ -23,7 +23,7 @@
     "xlarge": "/assets/images/xlarge.png"
   },
   "author": {
-    "name": "ThaYoung1!",
+    "name": "ThaYoung1",
     "email": "davydejong.ddj@gmail.com"
   },
   "brandColor": "#5741d9",
@@ -31,10 +31,10 @@
     "triggers": [
       {
         "title": {
-          "en": "Pair price changes"
+          "en": "Pair price updated"
         },
         "titleFormatted": {
-          "en": "Pair [[pair]] becomes [[operator]] [[price]]"
+          "en": "Pair [[pair]] price updated"
         },
         "args": [
           {
@@ -44,43 +44,27 @@
             "placeholder": {
               "en": "choose asset pair"
             }
-          },
-          {
-            "type": "dropdown",
-            "name": "operator",
-            "title": {
-              "en": "operator"
-            },
-            "values": [
-              {
-                "id": "1",
-                "label": {
-                  "en": "Greater than"
-                }
-              },
-              {
-                "id": "2",
-                "label": {
-                  "en": "Smaller than"
-                }
-              }
-            ]
-          },
-          {
-            "type": "number",
-            "name": "price",
-            "title": {
-              "en": "price"
-            },
-            "placeholder": {
-              "en": "price"
-            },
-            "min": 0,
-            "max": 99999999,
-            "step": 0.01
           }
         ],
-        "id": "pair-price-changes"
+        "tokens": [
+          {
+            "name": "price",
+            "type": "number",
+            "title": {
+              "en": "Asset Price"
+            },
+            "example": 22495.81
+          },
+          {
+            "name": "pair",
+            "type": "string",
+            "title": {
+              "en": "Asset Pair"
+            },
+            "example": "XBT/EUR"
+          }
+        ],
+        "id": "pair-price-updated"
       }
     ],
     "actions": [

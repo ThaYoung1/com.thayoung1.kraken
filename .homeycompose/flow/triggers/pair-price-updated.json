@@ -1,0 +1,32 @@
+{
+  "title": {
+    "en": "Pair price updated"
+  },
+  "titleFormatted": { 
+    "en": "Pair [[pair]] price updated" 
+  },  
+  "args": [
+    {
+      "type": "autocomplete",
+      "name": "pair",
+      "title": "Asset Pair",
+      "placeholder": {
+        "en": "choose asset pair"
+      }
+    }
+  ],
+  "tokens": [
+    {
+      "name": "price",
+      "type": "number",
+      "title": { "en": "Asset Price" },
+      "example": 22495.81
+    },
+    {
+      "name": "pair",
+      "type": "string",
+      "title": { "en": "Asset Pair" },
+      "example": "XBT/EUR"
+    }
+  ]
+}
