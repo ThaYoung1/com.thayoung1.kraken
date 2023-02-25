@@ -6,30 +6,11 @@ const KrakenClient = require('kraken-api');
 let assetPairs;
 let kraken;
 
-class MyDevice extends Device {
-  async onPoll() {
-    kraken = new KrakenClient(this.getSetting('apiKey'), this.getSetting('privateKey'));
-    let balance = await kraken.api('Balance');
-
-    if (!this.hasCapability('account_balance_ZEUR')) {
-      await this.addCapability('account_balance_ZEUR').catch(this.error);
-    }
-    if (!this.hasCapability('account_balance_XXBT')) {
-      await this.addCapability('account_balance_XXBT').catch(this.error);
-    }
-
-    if (balance.result['ZEUR']){
-      if (this.getCapabilityValue('account_balance_ZEUR') != +balance.result['ZEUR'])
-      await this.setCapabilityValue('account_balance_ZEUR', +balance.result['ZEUR']).catch(this.error);
-    }
-    if (balance.result['XXBT']){
-      if (this.getCapabilityValue('account_balance_XXBT') != +balance.result['XXBT'])
-        await this.setCapabilityValue('account_balance_XXBT', +balance.result['XXBT']).catch(this.error);
-    }
-  }
-  
+class MyDevice extends Device { 
   async onInit() {
     this.onPollInterval = setInterval(this.onPoll.bind(this), 20000);
+
+    kraken = new KrakenClient(this.getSetting('apiKey'), this.getSetting('privateKey'));
 
     // TODO device init met credentials
     this.log('MyDevice has been initialized');
@@ -84,9 +65,32 @@ class MyDevice extends Device {
    * onDeleted is called when the user deleted the device.
    */
   async onDeleted() {
+    clearInterval(this.onPollInterval);
+
     this.log('MyDevice has been deleted');
   }
 
+  
+  async onPoll() {
+    let balance = await kraken.api('Balance');
+
+    if (!this.hasCapability('meter_account_balance_ZEUR')) {
+      await this.addCapability('meter_account_balance_ZEUR').catch(this.error);
+    }
+    if (!this.hasCapability('meter_account_balance_XXBT')) {
+      await this.addCapability('meter_account_balance_XXBT').catch(this.error);
+    }
+
+    if (balance.result['ZEUR']){
+      if (this.getCapabilityValue('meter_account_balance_ZEUR') != +balance.result['ZEUR'])
+      await this.setCapabilityValue('meter_account_balance_ZEUR', +balance.result['ZEUR']).catch(this.error);
+    }
+    if (balance.result['XXBT']){
+      if (this.getCapabilityValue('meter_account_balance_XXBT') != +balance.result['XXBT'])
+        await this.setCapabilityValue('meter_account_balance_XXBT', +balance.result['XXBT']).catch(this.error);
+    }
+  }
+  
   async addOrder(ordertype, volume, args){
     var result = await kraken.api('AddOrder', { 
       ordertype: ordertype, // (req) market, limit, stop-loss, take-profit, stop-loss-limit, take-profit-limit, settle-position

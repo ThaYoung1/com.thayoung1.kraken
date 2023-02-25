@@ -5,8 +5,8 @@
   },
   "class": "other",
   "capabilities": [
-    "account_balance_XXBT",
-    "account_balance_ZEUR"
+    "meter_account_balance_XXBT",
+    "meter_account_balance_ZEUR"
   ],
   "platforms": [
     "local"
