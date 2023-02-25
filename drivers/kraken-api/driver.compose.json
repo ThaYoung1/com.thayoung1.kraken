@@ -4,7 +4,10 @@
     "nl": "Kraken API"
   },
   "class": "other",
-  "capabilities": [],
+  "capabilities": [
+    "account_balance_XXBT",
+    "account_balance_ZEUR"
+  ],
   "platforms": [
     "local"
   ],
@@ -38,6 +41,6 @@
     {
       "id": "add_devices",
       "template": "add_devices"
-      }
+    }
   ]
 }

@@ -7,7 +7,31 @@ let assetPairs;
 let kraken;
 
 class MyDevice extends Device {
+  async onPoll() {
+    kraken = new KrakenClient(this.getSetting('apiKey'), this.getSetting('privateKey'));
+    let balance = await kraken.api('Balance');
+
+    if (!this.hasCapability('account_balance_ZEUR')) {
+      await this.addCapability('account_balance_ZEUR').catch(this.error);
+    }
+    if (!this.hasCapability('account_balance_XXBT')) {
+      await this.addCapability('account_balance_XXBT').catch(this.error);
+    }
+
+    if (balance.result['ZEUR']){
+      if (this.getCapabilityValue('account_balance_ZEUR') != +balance.result['ZEUR'])
+      await this.setCapabilityValue('account_balance_ZEUR', +balance.result['ZEUR']).catch(this.error);
+    }
+    if (balance.result['XXBT']){
+      if (this.getCapabilityValue('account_balance_XXBT') != +balance.result['XXBT'])
+        await this.setCapabilityValue('account_balance_XXBT', +balance.result['XXBT']).catch(this.error);
+    }
+  }
+  
   async onInit() {
+    this.onPollInterval = setInterval(this.onPoll.bind(this), 20000);
+
+    // TODO device init met credentials
     this.log('MyDevice has been initialized');
     const placeMarketOrderCard = this.homey.flow.getActionCard("place-market-order");
     placeMarketOrderCard.registerArgumentAutocompleteListener("pair", async (query, args) => { return await this.autocompletePairs(query, args); });
@@ -83,7 +107,7 @@ class MyDevice extends Device {
 
     if (args.unit.baseorquote == args.pair.quote){
       if (!price){
-        kraken = new KrakenClient(args.device.getSettings().apiKey, args.device.getSettings().privateKey);
+        kraken = new KrakenClient(this.getSetting('apiKey'), this.getSetting('privateKey'));
         var ticker = await kraken.api('Ticker', { pair: args.pair.base + args.pair.quote });
         var arrTicker = Object.values(ticker.result);
         price = arrTicker[0].c[0];
@@ -117,7 +141,7 @@ class MyDevice extends Device {
 
   async autocompletePairs(query, args){
      // filter based on the query
-     kraken = new KrakenClient(args.device.getSettings().apiKey, args.device.getSettings().privateKey);
+     kraken = new KrakenClient(this.getSetting('apiKey'), this.getSetting('privateKey'));
      if (!assetPairs){
       assetPairs = await kraken.api('AssetPairs');
      }

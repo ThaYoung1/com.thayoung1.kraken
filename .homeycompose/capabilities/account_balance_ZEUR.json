@@ -1,0 +1,14 @@
+{
+    "type": "number",
+    "title": { "en": "Account Balance" },
+    "uiComponent": "sensor",
+    "getable": true,
+    "setable": false,
+    "units": { "en": "Euro" },
+    "min": 0,
+    "max": 99999,
+    "step": 0.01,
+    "decimals": 2,
+    "insights": true,
+    "icon": "assets/euro.svg"
+}

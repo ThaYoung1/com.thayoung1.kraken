@@ -282,7 +282,10 @@
         "nl": "Kraken API"
       },
       "class": "other",
-      "capabilities": [],
+      "capabilities": [
+        "account_balance_XXBT",
+        "account_balance_ZEUR"
+      ],
       "platforms": [
         "local"
       ],
@@ -341,5 +344,43 @@
         }
       ]
     }
-  ]
+  ],
+  "capabilities": {
+    "account_balance_XXBT": {
+      "type": "number",
+      "title": {
+        "en": "Account Balance"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": false,
+      "units": {
+        "en": "Bitcoin"
+      },
+      "min": 0,
+      "max": 99999,
+      "step": 0.00001,
+      "decimals": 5,
+      "insights": true,
+      "icon": "assets/bitcoin.svg"
+    },
+    "account_balance_ZEUR": {
+      "type": "number",
+      "title": {
+        "en": "Account Balance"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": false,
+      "units": {
+        "en": "Euro"
+      },
+      "min": 0,
+      "max": 99999,
+      "step": 0.01,
+      "decimals": 2,
+      "insights": true,
+      "icon": "assets/euro.svg"
+    }
+  }
 }
