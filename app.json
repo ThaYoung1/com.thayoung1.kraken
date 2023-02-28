@@ -283,8 +283,7 @@
       },
       "class": "other",
       "capabilities": [
-        "meter_account_balance_XXBT",
-        "meter_account_balance_ZEUR"
+        "meter_wallet"
       ],
       "platforms": [
         "local"
@@ -346,7 +345,7 @@
     }
   ],
   "capabilities": {
-    "meter_account_balance_XXBT": {
+    "meter_wallet": {
       "type": "number",
       "title": {
         "en": "Account Balance"
@@ -360,27 +359,9 @@
       "min": 0,
       "max": 99999,
       "step": 0.00001,
-      "decimals": 5,
+      "decimals": 8,
       "insights": true,
-      "icon": "assets/bitcoin.svg"
-    },
-    "meter_account_balance_ZEUR": {
-      "type": "number",
-      "title": {
-        "en": "Account Balance"
-      },
-      "uiComponent": "sensor",
-      "getable": true,
-      "setable": false,
-      "units": {
-        "en": "€"
-      },
-      "min": 0,
-      "max": 99999,
-      "step": 0.01,
-      "decimals": 2,
-      "insights": true,
-      "icon": "assets/euro.svg"
+      "icon": "assets/wallet.svg"
     }
   }
 }

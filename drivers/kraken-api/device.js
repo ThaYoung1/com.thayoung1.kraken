@@ -8,7 +8,8 @@ let kraken;
 
 class MyDevice extends Device { 
   async onInit() {
-    this.onPollInterval = setInterval(this.onPoll.bind(this), 20000);
+    //this.onPollInterval = setInterval(this.onPoll.bind(this), 20000);
+    this.homey.setInterval(this.onPoll.bind(this), 20000)
 
     kraken = new KrakenClient(this.getSetting('apiKey'), this.getSetting('privateKey'));
 
@@ -74,21 +75,23 @@ class MyDevice extends Device {
   async onPoll() {
     let balance = await kraken.api('Balance');
 
-    if (!this.hasCapability('meter_account_balance_ZEUR')) {
-      await this.addCapability('meter_account_balance_ZEUR').catch(this.error);
-    }
-    if (!this.hasCapability('meter_account_balance_XXBT')) {
-      await this.addCapability('meter_account_balance_XXBT').catch(this.error);
-    }
+    let arrBalance = Object.entries(balance.result).map(([key, val]) => [key, val]);
+    arrBalance.forEach(b => {
+      if (+b[1] > 0){
+        this.log('Result: ' + b[0]);
 
-    if (balance.result['ZEUR']){
-      if (this.getCapabilityValue('meter_account_balance_ZEUR') != +balance.result['ZEUR'])
-      await this.setCapabilityValue('meter_account_balance_ZEUR', +balance.result['ZEUR']).catch(this.error);
-    }
-    if (balance.result['XXBT']){
-      if (this.getCapabilityValue('meter_account_balance_XXBT') != +balance.result['XXBT'])
-        await this.setCapabilityValue('meter_account_balance_XXBT', +balance.result['XXBT']).catch(this.error);
-    }
+        this.removeCapability('meter_wallet.' + b[0]);
+
+        if (!this.hasCapability('meter_wallet.' + b[0])) {
+          this.addCapability('meter_wallet.' + b[0]).catch(this.error);
+        }
+
+        if (this.getCapabilityValue('meter_wallet.' + b[0]) != +b[1]) {
+          this.setCapabilityValue('meter_wallet.' + b[0], +b[1]).catch(this.error);
+          this.setCapabilityOptions('meter_wallet.' + b[0], { units: this.prettyPrintBaseQuote(b[0]) }).catch(this.error); 
+        }
+      }
+    });
   }
   
   async addOrder(ordertype, volume, args){
