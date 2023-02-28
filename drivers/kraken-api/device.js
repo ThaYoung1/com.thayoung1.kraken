@@ -8,13 +8,13 @@ let kraken;
 
 class MyDevice extends Device { 
   async onInit() {
+    this.log('MyDevice onInit');
+
     //this.onPollInterval = setInterval(this.onPoll.bind(this), 20000);
     this.homey.setInterval(this.onPoll.bind(this), 20000)
 
     kraken = new KrakenClient(this.getSetting('apiKey'), this.getSetting('privateKey'));
 
-    // TODO device init met credentials
-    this.log('MyDevice has been initialized');
     const placeMarketOrderCard = this.homey.flow.getActionCard("place-market-order");
     placeMarketOrderCard.registerArgumentAutocompleteListener("pair", async (query, args) => { return await this.autocompletePairs(query, args); });
     placeMarketOrderCard.registerArgumentAutocompleteListener("unit", async (query, args) => { return await this.autocompleteUnits(query, args); });
@@ -66,29 +66,24 @@ class MyDevice extends Device {
    * onDeleted is called when the user deleted the device.
    */
   async onDeleted() {
-    clearInterval(this.onPollInterval);
-
+    if (this.onPollInterval){
+      clearInterval(this.onPollInterval);
+    }
     this.log('MyDevice has been deleted');
   }
 
   
   async onPoll() {
     let balance = await kraken.api('Balance');
-
     let arrBalance = Object.entries(balance.result).map(([key, val]) => [key, val]);
-    arrBalance.forEach(b => {
+    arrBalance.forEach(async b => {
       if (+b[1] > 0){
-        this.log('Result: ' + b[0]);
-
-        this.removeCapability('meter_wallet.' + b[0]);
-
         if (!this.hasCapability('meter_wallet.' + b[0])) {
-          this.addCapability('meter_wallet.' + b[0]).catch(this.error);
+          await this.addCapability('meter_wallet.' + b[0]).catch(this.error);
         }
-
         if (this.getCapabilityValue('meter_wallet.' + b[0]) != +b[1]) {
-          this.setCapabilityValue('meter_wallet.' + b[0], +b[1]).catch(this.error);
-          this.setCapabilityOptions('meter_wallet.' + b[0], { units: this.prettyPrintBaseQuote(b[0]) }).catch(this.error); 
+          await this.setCapabilityValue('meter_wallet.' + b[0], +b[1]).catch(this.error);
+          await this.setCapabilityOptions('meter_wallet.' + b[0], { units: this.prettyPrintBaseQuote(b[0]) }).catch(this.error); 
         }
       }
     });
