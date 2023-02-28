@@ -41,22 +41,26 @@ class KrakenApp extends Homey.App {
 
     // get the pairs which are used in flow cards 
     const pairsInCards = this.homey.settings.get("pairsInCards");
-    // get ticker info for all assets and convert to an array we can work with
-    ticker = await kraken.api('Ticker');
-    const tickerPair = Object.entries(Object.entries(ticker)[1][1]);
-    let done = [];
-    // trigger 
-    pairsInCards.forEach(x => {
-      let result = tickerPair.find(y => y[0] == x.pair.base + x.pair.quote);
-      if (result && !done.find(y => y.name == x.name)) {
-        done.push(x);
-        const tokens = { 
-          price: +result[1].c[0],
-          pair: x.pair.name };
-        const pairPriceUpdatedCard = this.homey.flow.getTriggerCard("pair-price-updated");
-        pairPriceUpdatedCard.trigger(tokens, result);
-      }
-    });
+
+    if (pairsInCards) {
+      // only do this when there are cards defined
+      // get ticker info for all assets and convert to an array we can work with
+      ticker = await kraken.api('Ticker');
+      const tickerPair = Object.entries(Object.entries(ticker)[1][1]);
+      let done = [];
+      // trigger 
+      pairsInCards.forEach(x => {
+        let result = tickerPair.find(y => y[0] == x.pair.base + x.pair.quote);
+        if (result && !done.find(y => y.name == x.name)) {
+          done.push(x);
+          const tokens = { 
+            price: +result[1].c[0],
+            pair: x.pair.name };
+          const pairPriceUpdatedCard = this.homey.flow.getTriggerCard("pair-price-updated");
+          pairPriceUpdatedCard.trigger(tokens, result);
+        }
+      });
+    }
 
     this.log('updateTicker end');
   }
