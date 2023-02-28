@@ -5,7 +5,6 @@
   },
   "class": "other",
   "capabilities": [
-    "meter_wallet"
   ],
   "platforms": [
     "local"
