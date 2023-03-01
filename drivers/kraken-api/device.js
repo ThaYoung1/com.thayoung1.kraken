@@ -91,12 +91,12 @@ class MyDevice extends Device {
         }
         if (this.getCapabilityValue('meter_wallet.' + b[0]) != +b[1]) {
           await this.setCapabilityValue('meter_wallet.' + b[0], +b[1]).catch(this.error);
+          await this.setCapabilityOptions('meter_wallet.' + b[0], { 
+            units: asset[0][1].altname,
+            title: asset[0][1].altname + ' Balance',
+            decimals: +asset[0][1].display_decimals
+          }).catch(this.error); 
         }
-        await this.setCapabilityOptions('meter_wallet.' + b[0], { 
-          units: asset[0][1].altname,
-          title: asset[0][1].altname + ' Balance',
-          decimals: +asset[0][1].display_decimals
-        }).catch(this.error); 
       }
     });
     this.log('onPoll end');
