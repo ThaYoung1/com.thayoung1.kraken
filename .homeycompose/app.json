@@ -37,5 +37,9 @@
       "ethereum",
       "xrp"
     ]
+  },
+  "homepage": "https://www.kraken.com/",
+  "contributors": {
+    "developers": []
   }
 }

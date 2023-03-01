@@ -3,18 +3,16 @@
 const { Device } = require('homey');
 const KrakenClient = require('kraken-api');
 
-let assetPairs;
-let kraken;
+let kraken
+let assets, assetPairs
 let pollInterval; 
 
-class MyDevice extends Device { 
+class KrakenAPIDevice extends Device { 
   async onInit() {
-    this.log('MyDevice onInit');
-
     const settings = this.getSettings();
-    pollInterval = this.homey.setInterval(this.onPoll.bind(this), settings.updateInterval * 1000);
-
     kraken = new KrakenClient(settings.apiKey, settings.privateKey);
+
+    pollInterval = this.homey.setInterval(this.onPoll.bind(this), settings.updateInterval * 1000);
 
     const placeMarketOrderCard = this.homey.flow.getActionCard("place-market-order");
     placeMarketOrderCard.registerArgumentAutocompleteListener("pair", async (query, args) => { return await this.autocompletePairs(query, args); });
@@ -39,18 +37,8 @@ class MyDevice extends Device {
 
   }
 
-  async onAdded() {
-    this.log('MyDevice has been added');
-  }
+  async onAdded(){}
 
-  /**
-   * onSettings is called when the user updates the device's settings.
-   * @param {object} event the onSettings event data
-   * @param {object} event.oldSettings The old settings object
-   * @param {object} event.newSettings The new settings object
-   * @param {string[]} event.changedKeys An array of keys changed since the previous version
-   * @returns {Promise<string|void>} return a custom message that will be displayed
-   */
   async onSettings({ oldSettings, newSettings, changedKeys }) {
     if (changedKeys.find(key => key == 'updateInterval')){
       this.homey.clearInterval(pollInterval);
@@ -58,31 +46,22 @@ class MyDevice extends Device {
     }
   }
 
-  /**
-   * onRenamed is called when the user updates the device's name.
-   * This method can be used this to synchronise the name to the device.
-   * @param {string} name The new name
-   */
-  async onRenamed(name) {
-    this.log('MyDevice was renamed');
-  }
+  async onRenamed(name){}
 
-  /**
-   * onDeleted is called when the user deleted the device.
-   */
   async onDeleted() {
     this.homey.clearInterval(pollInterval);
     this.log('MyDevice has been deleted');
   }
 
-  
   async onPoll() {
     this.log('onPoll start');
-    let assets = await kraken.api('Assets');
-    let arrAssets = Object.entries(assets.result).map(([key, val]) => [key, val]);
 
+    assets = await kraken.api('Assets');
+    let arrAssets = Object.entries(assets.result).map(([key, val]) => [key, val]);
+    
     let balance = await kraken.api('Balance');    
     let arrBalance = Object.entries(balance.result).map(([key, val]) => [key, val]);
+
     arrBalance.forEach(async b => {
       let asset = arrAssets.filter(a => a[0] == b[0]);
       if (parseFloat((+b[1]).toFixed(+asset[0][1].display_decimals)) > 0){
@@ -122,7 +101,6 @@ class MyDevice extends Device {
 
     if (args.unit.baseorquote == args.pair.quote){
       if (!price){
-        kraken = new KrakenClient(this.getSetting('apiKey'), this.getSetting('privateKey'));
         var ticker = await kraken.api('Ticker', { pair: args.pair.base + args.pair.quote });
         var arrTicker = Object.values(ticker.result);
         price = arrTicker[0].c[0];
@@ -130,7 +108,7 @@ class MyDevice extends Device {
 
       var volume = args.volume / price;
       if (volume < args.pair.ordermin) {
-        throw new Error('Fout: Minimale ordergrootte van ' + args.pair.ordermin + ' niet gehaald');
+        throw new Error(this.homey.__("Error_MinOrderSize", { ordermin: args.pair.ordermin, unit: args.pair.base }));
       }
     }
     return volume;
@@ -138,12 +116,18 @@ class MyDevice extends Device {
 
   async autocompleteUnits(query, args){
       let results = [];
-      results.push({ 
-        name: this.prettyPrintBaseQuote(args.pair.base),
-        baseorquote: args.pair.base        
-       });
-      results.push({ 
-        name: this.prettyPrintBaseQuote(args.pair.quote),
+
+      if (!assets){
+        assets = await kraken.api('Assets');
+      }
+      let arrAssets = Object.entries(assets.result).map(([key, val]) => [key, val]);
+      
+      results.push({
+        name: arrAssets.find(x => x[0] == args.pair.base)[1].altname,
+        baseorquote: args.pair.base
+      });
+      results.push({
+        name: arrAssets.find(x => x[0] == args.pair.quote)[1].altname,
         baseorquote: args.pair.quote
       });
 
@@ -155,7 +139,7 @@ class MyDevice extends Device {
 
   async autocompletePairs(query, args){
      // filter based on the query
-     kraken = new KrakenClient(this.getSetting('apiKey'), this.getSetting('privateKey'));
+     //kraken = new KrakenClient(this.getSetting('apiKey'), this.getSetting('privateKey'));
      if (!assetPairs){
       assetPairs = await kraken.api('AssetPairs');
      }
@@ -174,16 +158,6 @@ class MyDevice extends Device {
        return x.name.toLowerCase().includes(query.toLowerCase());
      });
   }
-
-  prettyPrintBaseQuote(item) {
-    if ( item.length >= 4 &&
-        (item.toUpperCase().startsWith('X') ||
-         item.toUpperCase().startsWith('Z')) ){
-        return item.substring(1);
-    } else {
-      return item;
-    }
-  }
 }
 
-module.exports = MyDevice;
+module.exports = KrakenAPIDevice;

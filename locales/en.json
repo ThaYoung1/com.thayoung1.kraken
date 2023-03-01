@@ -1,1 +1,3 @@
-{}
+{
+    "Error_MinOrderSize": "Error: Minimal order size of __ordermin__ __unit__ not met"
+}

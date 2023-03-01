@@ -39,6 +39,10 @@
       "xrp"
     ]
   },
+  "homepage": "https://www.kraken.com/",
+  "contributors": {
+    "developers": []
+  },
   "flow": {
     "triggers": [
       {
