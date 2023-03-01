@@ -5,15 +5,16 @@ const KrakenClient = require('kraken-api');
 
 let assetPairs;
 let kraken;
+let pollInterval; 
 
 class MyDevice extends Device { 
   async onInit() {
     this.log('MyDevice onInit');
 
-    //this.onPollInterval = setInterval(this.onPoll.bind(this), 20000);
-    this.homey.setInterval(this.onPoll.bind(this), 20000)
+    const settings = this.getSettings();
+    pollInterval = this.homey.setInterval(this.onPoll.bind(this), settings.updateInterval * 1000);
 
-    kraken = new KrakenClient(this.getSetting('apiKey'), this.getSetting('privateKey'));
+    kraken = new KrakenClient(settings.apiKey, settings.privateKey);
 
     const placeMarketOrderCard = this.homey.flow.getActionCard("place-market-order");
     placeMarketOrderCard.registerArgumentAutocompleteListener("pair", async (query, args) => { return await this.autocompletePairs(query, args); });
@@ -22,7 +23,8 @@ class MyDevice extends Device {
       // the need to calculate order volume
       var volume = await this.getVolume(args);
       var result = await this.addOrder('market', volume, args);
-      throw new Error(JSON.stringify(result));
+      //throw new Error(JSON.stringify(result));
+      return true;
     });
 
     const placeLimitOrderCard = this.homey.flow.getActionCard("place-limit-order");
@@ -50,7 +52,10 @@ class MyDevice extends Device {
    * @returns {Promise<string|void>} return a custom message that will be displayed
    */
   async onSettings({ oldSettings, newSettings, changedKeys }) {
-    this.log('MyDevice settings where changed');
+    if (changedKeys.find(key => key == 'updateInterval')){
+      this.homey.clearInterval(pollInterval);
+      pollInterval = this.homey.setInterval(this.onPoll.bind(this), newSettings.updateInterval * 1000);
+    }
   }
 
   /**
@@ -66,12 +71,13 @@ class MyDevice extends Device {
    * onDeleted is called when the user deleted the device.
    */
   async onDeleted() {
-    this.homey.clearInterval(this.onPollInterval);
+    this.homey.clearInterval(pollInterval);
     this.log('MyDevice has been deleted');
   }
 
   
   async onPoll() {
+    this.log('onPoll start');
     let assets = await kraken.api('Assets');
     let arrAssets = Object.entries(assets.result).map(([key, val]) => [key, val]);
 
@@ -93,6 +99,7 @@ class MyDevice extends Device {
         }).catch(this.error); 
       }
     });
+    this.log('onPoll end');
   }
   
   async addOrder(ordertype, volume, args){
@@ -130,7 +137,6 @@ class MyDevice extends Device {
   }
 
   async autocompleteUnits(query, args){
-      // filter based on the query
       let results = [];
       results.push({ 
         name: this.prettyPrintBaseQuote(args.pair.base),
