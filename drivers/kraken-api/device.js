@@ -3,8 +3,8 @@
 const { Device } = require('homey');
 const KrakenClient = require('kraken-api');
 
-let kraken
-let assets, assetPairs
+let kraken;
+let assets, assetPairs;
 let pollInterval; 
 
 class KrakenAPIDevice extends Device { 
