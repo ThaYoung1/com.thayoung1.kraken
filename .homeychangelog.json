@@ -7,5 +7,8 @@
   },
   "0.9.2": {
     "en": "Added documentation"
+  },
+  "0.9.5": {
+    "en": "Improved inspect implementation"
   }
 }

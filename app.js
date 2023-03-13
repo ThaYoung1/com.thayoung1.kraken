@@ -1,6 +1,8 @@
 'use strict';
 
-require('inspector').open(9231, '0.0.0.0')
+if (process.env.DEBUG === '1') {
+require('inspector').open(9231, '0.0.0.0', false)
+}
 
 const KrakenLib = require('./lib/KrakenLib');
 const Homey = require('homey');
