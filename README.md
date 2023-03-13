@@ -3,7 +3,7 @@
 Adds support for Kraken on your Homey device. More info on Homey: https://homey.app/.
 
 With this Homey App you can (currently) do the following things:
-- See and act on changes in your Kraken naccount balances 
+- See and act on changes in your Kraken account balances 
 - Act on price changes of Kraken Asset Pairs
 - Place a market or limit order for a Kraken Asset Pair of your choice in the unit of your choice on Kraken
 
