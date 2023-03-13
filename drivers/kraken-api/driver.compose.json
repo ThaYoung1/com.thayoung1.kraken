@@ -4,12 +4,13 @@
     "nl": "Kraken API"
   },
   "class": "other",
-  "capabilities": [
-  ],
+  "capabilities": [],
   "platforms": [
     "local"
   ],
-  "connectivity": [],
+  "connectivity": [
+    "cloud"
+  ],
   "images": {
     "small": "{{driverAssetsPath}}/images/small.png",
     "large": "{{driverAssetsPath}}/images/large.png",
@@ -25,16 +26,26 @@
           "en": "Fill in your Kraken API and Private Key",
           "nl": "Voer je Kraken API en Private Key in"
         },
-        "usernameLabel": { "en": "API Key" },
-        "usernamePlaceholder": { "en": "JDduUwiwIOIOOWw..." },
-        "passwordLabel": { "en": "Private Key" },
-        "passwordPlaceholder": { "en": "aaSkKQKKekddd..." }
+        "usernameLabel": {
+          "en": "API Key"
+        },
+        "usernamePlaceholder": {
+          "en": "JDduUwiwIOIOOWw..."
+        },
+        "passwordLabel": {
+          "en": "Private Key"
+        },
+        "passwordPlaceholder": {
+          "en": "aaSkKQKKekddd..."
+        }
       }
     },
     {
       "id": "list_devices",
       "template": "list_devices",
-      "navigation": { "next": "add_devices" }
+      "navigation": {
+        "next": "add_devices"
+      }
     },
     {
       "id": "add_devices",

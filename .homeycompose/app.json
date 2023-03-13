@@ -41,5 +41,10 @@
   "homepage": "https://www.kraken.com/",
   "contributors": {
     "developers": []
+  },
+  "source": "https://github.com/ThaYoung1/com.thayoung1.kraken",
+  "support": "https://github.com/ThaYoung1/com.thayoung1.kraken/issues",
+  "bugs": {
+    "url": "https://github.com/ThaYoung1/com.thayoung1.kraken/issues"
   }
 }
