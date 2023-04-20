@@ -10,5 +10,8 @@
   },
   "0.9.5": {
     "en": "Improved inspect implementation"
+  },
+  "0.9.6": {
+    "en": "Optimized error handling"
   }
 }

@@ -64,18 +64,20 @@ class KrakenAPIDevice extends Device {
 
     arrBalance.forEach(async b => {
       let asset = arrAssets.filter(a => a[0] == b[0]);
-      if (parseFloat((+b[1]).toFixed(+asset[0][1].display_decimals)) > 0){
-        if (!this.hasCapability('meter_wallet.' + b[0])) {
-          await this.addCapability('meter_wallet.' + b[0]).catch(this.error);
-        }
-        if (this.getCapabilityValue('meter_wallet.' + b[0]) != +b[1]) {
-          await this.setCapabilityValue('meter_wallet.' + b[0], +b[1]).catch(this.error);
-          await this.setCapabilityOptions('meter_wallet.' + b[0], { 
-            units: asset[0][1].altname,
-            title: asset[0][1].altname + ' Balance',
-            decimals: +asset[0][1].display_decimals
-          }).catch(this.error); 
-        }
+      if (asset){
+        if (parseFloat((+b[1]).toFixed(+asset[0][1].display_decimals)) > 0){
+          if (!this.hasCapability('meter_wallet.' + b[0])) {
+            await this.addCapability('meter_wallet.' + b[0]).catch(this.error);
+          }
+          if (this.getCapabilityValue('meter_wallet.' + b[0]) != +b[1]) {
+            await this.setCapabilityValue('meter_wallet.' + b[0], +b[1]).catch(this.error);
+            await this.setCapabilityOptions('meter_wallet.' + b[0], { 
+              units: asset[0][1].altname,
+              title: asset[0][1].altname + ' Balance',
+              decimals: +asset[0][1].display_decimals
+            }).catch(this.error); 
+          }
+        } 
       }
     });
     this.log('onPoll end');
