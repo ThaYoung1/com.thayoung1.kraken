@@ -13,5 +13,11 @@
   },
   "0.9.6": {
     "en": "Optimized error handling"
+  },
+  "0.9.7": {
+    "en": "Fixed exceptions"
+  },
+  "0.9.8": {
+    "en": "Error handling"
   }
 }

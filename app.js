@@ -47,7 +47,13 @@ class KrakenApp extends Homey.App {
     if (pairsInCards) {
       // only do this when there are cards defined
       // get ticker info for all assets and convert to an array we can work with
-      ticker = await kraken.api('Ticker');
+      try {
+        ticker = await kraken.api('Ticker');
+      } catch (error) {
+        this.log('Error onPoll, kraken.api Ticker: ' + JSON.stringify(error));
+        return;
+      }
+      
       const tickerPair = Object.entries(Object.entries(ticker)[1][1]);
       let done = [];
       // trigger 
@@ -70,7 +76,12 @@ class KrakenApp extends Homey.App {
   async autocompletePairs(query, args){
     // filter based on the query
     if (!assetPairs){
-     assetPairs = await kraken.api('AssetPairs');
+      try {
+        assetPairs = await kraken.api('AssetPairs');       
+      } catch (error) {
+        this.log('Error autocompletePairs, kraken.api AssetPairs: ' + JSON.stringify(error));
+        return;
+      }
     }
 
     let results = Object.values(assetPairs.result);

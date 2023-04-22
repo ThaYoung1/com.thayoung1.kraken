@@ -2,6 +2,7 @@
 
 const { Device } = require('homey');
 const KrakenClient = require('kraken-api');
+const { json } = require('stream/consumers');
 
 let kraken;
 let assets, assetPairs;
@@ -56,15 +57,26 @@ class KrakenAPIDevice extends Device {
   async onPoll() {
     this.log('onPoll start');
 
-    assets = await kraken.api('Assets');
+    try {
+      assets = await kraken.api('Assets');     
+    } catch (error) {
+      this.log('Error onPoll, kraken.api Assets: ' + JSON.stringify(error));
+      return;
+    }
     let arrAssets = Object.entries(assets.result).map(([key, val]) => [key, val]);
     
-    let balance = await kraken.api('Balance');    
+    let balance;
+    try {
+      balance = await kraken.api('Balance');
+    } catch (error) {
+      this.log('Error onPoll, kraken.api Balance: ' + JSON.stringify(error));
+      return
+    }
     let arrBalance = Object.entries(balance.result).map(([key, val]) => [key, val]);
 
     arrBalance.forEach(async b => {
       let asset = arrAssets.filter(a => a[0] == b[0]);
-      if (asset){
+      if (asset && asset[0] && asset[0][1]){
         if (parseFloat((+b[1]).toFixed(+asset[0][1].display_decimals)) > 0){
           if (!this.hasCapability('meter_wallet.' + b[0])) {
             await this.addCapability('meter_wallet.' + b[0]).catch(this.error);
@@ -84,16 +96,21 @@ class KrakenAPIDevice extends Device {
   }
   
   async addOrder(ordertype, volume, args){
-    var result = await kraken.api('AddOrder', { 
-      ordertype: ordertype, // (req) market, limit, stop-loss, take-profit, stop-loss-limit, take-profit-limit, settle-position
-      type: args.type, // (req) buy, sell
-      volume: volume, // moet worden berekend met actuele prijs bij markt orders
-      pair: args.pair.base + args.pair.quote, // gettable?
-      validate: this.getSetting('apitestmode'),
-      price: args.price
-      //userref: 159753,
-      //expiretm: '1676565876' // expires in
-    });
+    try {
+      var result = await kraken.api('AddOrder', { 
+        ordertype: ordertype, // (req) market, limit, stop-loss, take-profit, stop-loss-limit, take-profit-limit, settle-position
+        type: args.type, // (req) buy, sell
+        volume: volume, // moet worden berekend met actuele prijs bij markt orders
+        pair: args.pair.base + args.pair.quote, // gettable?
+        validate: this.getSetting('apitestmode'),
+        price: args.price
+        //userref: 159753,
+        //expiretm: '1676565876' // expires in
+      });    
+    } catch (error) {
+      this.log('Error addOrder, kraken.api AddOrder: ' + JSON.stringify(error));
+      return;
+    }
 
     return result;
   }
@@ -103,7 +120,13 @@ class KrakenAPIDevice extends Device {
 
     if (args.unit.baseorquote == args.pair.quote){
       if (!price){
-        var ticker = await kraken.api('Ticker', { pair: args.pair.base + args.pair.quote });
+        let ticker;
+        try {
+          ticker = await kraken.api('Ticker', { pair: args.pair.base + args.pair.quote });         
+        } catch (error) {
+          this.log('Error getVolume, kraken.api Ticker: ' + JSON.stringify(error));
+          return;
+        }
         var arrTicker = Object.values(ticker.result);
         price = arrTicker[0].c[0];
       }
@@ -120,7 +143,12 @@ class KrakenAPIDevice extends Device {
       let results = [];
 
       if (!assets){
-        assets = await kraken.api('Assets');
+        try {
+          assets = await kraken.api('Assets');         
+        } catch (error) {
+          this.log('Error autocompleteUnits, kraken.api Assets: ' + JSON.stringify(error));
+          return;
+        }
       }
       let arrAssets = Object.entries(assets.result).map(([key, val]) => [key, val]);
       
@@ -143,7 +171,12 @@ class KrakenAPIDevice extends Device {
      // filter based on the query
      //kraken = new KrakenClient(this.getSetting('apiKey'), this.getSetting('privateKey'));
      if (!assetPairs){
-      assetPairs = await kraken.api('AssetPairs');
+      try {
+        assetPairs = await kraken.api('AssetPairs');
+      } catch (error) {
+        this.log('Error autocompletePairs, kraken.api AssetPairs: ' + JSON.stringify(error));
+        return;
+      }
      }
 
      let results = Object.values(assetPairs.result);
